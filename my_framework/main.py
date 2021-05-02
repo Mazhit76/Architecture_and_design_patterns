@@ -1,5 +1,6 @@
 # quopri encode and decode strings
 import quopri
+from .requests import Requests, GetRequest, PostRequest
 
 
 # not find page
@@ -23,14 +24,28 @@ class Framework:
         if not path.endswith('/'):
             path = f'{path}/'
 
+        request = {}
+
+        # get all data request
+        method = environ['REQUEST_METHOD']
+        request['method'] = method
+
+        if method == 'POST':
+            data = PostRequest().get_post_request_params(environ)
+            request['data'] = data
+            print(f'Поступил post-запрос: {Framework.decode_value(data)}')
+
+        elif method == 'GET':
+            data = GetRequest().get_request_params(environ)
+            request['request_params'] = data
+            print(f'Нам пришли GET параметры: {data}')
+
         # assign a handler to the corresponding request adress
         if path in self.routes:
             view = self.routes[path]
         else:
             view = PageNotFound404()
 
-
-        request = {}
         # fill the dictionary with our handlers
         for front in self.fronts:
             front(request)
