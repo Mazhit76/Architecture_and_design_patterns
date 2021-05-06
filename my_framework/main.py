@@ -6,7 +6,7 @@ from .requests import Requests, GetRequest, PostRequest
 # not find page
 class PageNotFound404:
     def __call__(self, request):
-        return '404', 'PAGE not found, look your old and write new views or change request'
+        return '404  WHAT', 'PAGE not found, look your old and write new views or change request'
 
 class Framework:
 
@@ -51,6 +51,7 @@ class Framework:
             front(request)
         # prepare answer on request
         code, body = view(request)
+
         start_responce(code, [('Content-Type', 'text/html')])
         return [body.encode('utf-8')]
 

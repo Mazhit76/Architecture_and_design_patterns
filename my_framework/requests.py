@@ -16,9 +16,9 @@ class Requests:
     @staticmethod
     def get_request_params(environ):
         #         get parameter request
-        query_strung = environ['QUERY_STRING']
+        query_string = environ['QUERY_STRING'] # PATH_INFO ????
         #           transform parameter by dict
-        request_params = Requests.parse_input_data(query_strung)
+        request_params = Requests.parse_input_data(query_string)
         return request_params
 
     @staticmethod
