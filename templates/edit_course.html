@@ -15,9 +15,9 @@
     <div class="new_string"></div>
 
     <div>
-        <h1>Копирование курса для категории {{name}}</h1>
+        <h1>Редактирование курса для категории "{{ category }}"</h1>
         <form method="post">
-            <input type="text" name="name" placeholder="{{name}}">
+            <input type="text" value={{ name }} name="name">
             <button type="submit">Сохранить и вернуться к списку курсов</button>
         </form>
     </div>

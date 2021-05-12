@@ -77,19 +77,36 @@ class CreateCourse:
 class CopyCourse:
     def __call__(self, request):
         request_params = request['request_params']
+
         try:
             name = request_params['name']
-            name = site.decode_value(name)
             old_course = site.get_course(name)
             if old_course:
                 new_name = f'copy_{name}'
                 new_course = old_course.clone()
                 new_course.name = new_name
                 site.courses.append(new_course)
-            return '200 OK', render('copy_course.html', object_list=site.courses)
+                print(name)
+            return '200 OK', render('course_list.html', objects_list=site.courses, category=name)
         except KeyError:
             return '200 OK', 'No courses have been added yet'
 
+#controller - edit course
+
+class EditCourse:
+    def __call__(self, request):
+        if request['method'] == "POST":
+            data = request['data']
+            name = data['name']
+            name = site.decode_value(name)
+      # No  id in POST, and input in data
+
+
+        print(request)
+        request_params = request['request_params']
+        name = request_params['name']
+        name = site.decode_value(name)
+        return '200 OK', render('edit_course.html', new_name=name, name=name)
 
 # Controller create category
 
