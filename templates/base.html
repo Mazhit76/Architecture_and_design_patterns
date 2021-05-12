@@ -7,8 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-    {% block style %}{% endblock %}
-    <link rel="stylesheet" type="text/css" href="../static/my.css">
+    {% block style %}
+        {% include "inc-style.html" %}
+        <link rel="stylesheet" type="text/css" href="../static/my.css">
+    {% endblock %}
+
     {% endblock %}
 </head>
 <body>

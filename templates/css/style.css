@@ -1,4 +1,4 @@
-  элементы меню div
+
 .menu {
     float: right;
     position: relative;
@@ -26,7 +26,7 @@
     color: #8B00FF;
     font-size: 30px;
 }
-  элементы главной страницы div
+
 body {
 	font-family: Arial, Verdana, sans-serif;
 	font-size: 90%;

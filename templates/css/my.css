@@ -48,7 +48,7 @@ body{
 .container{
 
     border: solid 1px black;
-    height: 300px;
+    height: auto;
     margin-left: 60px;
     margin-right: 40px;
 }

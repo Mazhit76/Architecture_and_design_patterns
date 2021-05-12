@@ -51,7 +51,8 @@
         font-style: italic;
         color: #666666;}
     input[type="text"] {
-        width: 120px;
+        width: 320px;
+        height: 20px;
         border: 1px solid #d6d6d6;
         padding: 2px;
         outline: none;}
@@ -73,7 +74,7 @@
         cursor: pointer;}
     .title {
         float: left;
-        width: 160px;
+        width: 260px;
         clear: left;}
     .submit {
         width: 310px;
@@ -92,7 +93,7 @@
         font-size: 20px;
         list-style-type: none;
         /* li - блочный элемент, стоятся с столбик, сделаем их все в строку */
-        display: inline-block;
+        display: flex;
         width: 150px;}
     .menu li a {
         /*
@@ -101,5 +102,83 @@
         color: #8B00FF;
         font-size: 30px;}
     content{
-        position: relative;}
+        position: relative;}* {
+                                margin: 0;
+                                padding: 0;
+                            }
+    body{
+        margin: 0 auto;
+        max-width: 1800px;
+    }
+    .menu{
+        height: 50px;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;   /* do not see overlapping blocks*/
+        background:rgb(176, 218, 247);
+        border: 1px solid black;
+        display: flex;
+        justify-content: space-around;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        color: white;
+    }
+
+    .text{
+        flex-grow: 1;   /* all blocks are equal */
+        flex-basis: 200px;  /* min size blocks*/
+    }
+    .header {
+        height: 50px;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;   /* do not see overlapping blocks*/
+        background:wheat;
+        border: 1px solid black;
+    }
+
+    .header:first-child{
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .container{
+        flex-wrap: wrap;
+        display: flex;
+        border: solid 1px black;
+        height: auto;
+        margin-left: 60px;
+        margin-right: 40px;
+    }
+    .submenu{
+        width: 150px;
+        height: 50px;
+        margin: 5px;
+        border: chocolate 2px solid;
+    }
+    .new_string{
+        width: 100%;
+    }
+
+
+    .footer {
+        border: 1px solid black;
+        height: 50px;
+        width: 100%;
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+        background-color:grey;
+        clear: both; /* start clear list  */
+    }
+
+    .footer:last-child{
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
 </style>

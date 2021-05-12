@@ -96,7 +96,7 @@ class Engine:
         return UserFactory.create(type_)
 
     @staticmethod
-    def create_category(name, category = None):
+    def create_category(name, category=None):
         return Category(name, category)
 
     def find_category_by_id(self, id):
