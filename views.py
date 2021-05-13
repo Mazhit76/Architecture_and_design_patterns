@@ -94,19 +94,30 @@ class CopyCourse:
 #controller - edit course
 
 class EditCourse:
+    category_id = -1
     def __call__(self, request):
+
         if request['method'] == "POST":
             data = request['data']
             name = data['name']
+            old_name = data['old_name']
             name = site.decode_value(name)
+            old_name = site.decode_value(old_name)
+            if data['id']:
+                self.category_id = int(data['id'])
+                category = site.find_category_by_id(int(self.category_id))
+                course = site.get_course(old_name)
+                course.name = name
+            return '200 OK', render('course_list.html', objects_list=site.courses, category=category)
       # No  id in POST, and input in data
 
-
-        print(request)
-        request_params = request['request_params']
-        name = request_params['name']
-        name = site.decode_value(name)
-        return '200 OK', render('edit_course.html', new_name=name, name=name)
+        else:
+            print(request)
+            request_params = request['request_params']
+            name = request_params['name']
+            name = site.decode_value(name)
+            self.id_category = request_params['id']
+            return '200 OK', render('edit_course.html', old_name=name, name=name, id=self.id_category)
 
 # Controller create category
 

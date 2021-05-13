@@ -24,8 +24,7 @@
         {% for item in objects_list %}
         <li>
             {{item.name}} <span><a href="/copy_course/?name={{item.name}}">скопировать</a>
-            <a href="/edit_course/?name={{ item.name }}&id={{ id }}"> редактировать </a></span>
-            <span><a href="/edit_course/"></a></span>
+            <a href="/edit_course/?name={{ item.name }}&id={{id_category}}"> редактировать </a></span>
             <div class="new_string"></div>
         </li>
         {% endfor %}

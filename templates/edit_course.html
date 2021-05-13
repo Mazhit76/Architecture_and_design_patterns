@@ -17,7 +17,9 @@
     <div>
         <h1>Редактирование курса для категории "{{ category }}"</h1>
         <form method="post">
-            <input type="text" value={{ name }} name="name">
+            <input type="text" value={{ name }} name="name" >
+            <input name="id" value={{id}}>
+            <input name="old_name" value="{{old_name}}">
             <button type="submit">Сохранить и вернуться к списку курсов</button>
         </form>
     </div>
