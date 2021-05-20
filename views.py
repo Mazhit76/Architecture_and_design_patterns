@@ -2,35 +2,45 @@ from datetime import date
 
 from my_framework.templator import render
 from patterns.creational_patterns import Engine, Logger
+from patterns.structural_patterns import AppRoute, Debug
 
 site = Engine()
 logger = Logger('main')
 
+routes = {}
 
 # controller -  main list
+@AppRoute(routes=routes, url='/')
 class Index:
+    @Debug(name='Index')
     def __call__(self, request):
         return '200 OK', render('index.html', objects_list=site.categories)
 
 # controller -  main About
+@AppRoute(routes=routes, url='/about/')
 class About:
+    @Debug(name='About')
     def __call__(self, request):
         return '200 OK', render('about.html')
 
 # controller -  Not Found
+
 class NotFound404:
     def __call__(self, request):
         return '404 WHAT', 'PAGE not found look your old and write new views or change request'
 
 # controller -  Shedules
-
+@AppRoute(routes=routes, url='/study_programs/')
 class StudyPrograms:
+    @Debug(name='StudyPrograms')
     def __call__(self, request):
         return '200 OK', render('study_programs.html', data=date.today())
 
 
 # controller - list courses
+@AppRoute(routes=routes, url='/courses_list/')
 class CoursesList:
+    @Debug(name='CoursesList')
     def __call__(self, request):
         logger.log('Список курсов')
         try:
@@ -41,10 +51,10 @@ class CoursesList:
 
 
 # controller -  create course
-
+@AppRoute(routes=routes, url='/create_course/')
 class CreateCourse:
     category_id = -1
-
+    @Debug(name='CreateCourse')
     def __call__(self, request):
         if request['method'] == 'POST':
             #метод пост
@@ -73,8 +83,9 @@ class CreateCourse:
 
 
 #controller -copy course
-
+@AppRoute(routes=routes, url='/copy_course/')
 class CopyCourse:
+    @Debug(name='CopyCourse')
     def __call__(self, request):
         request_params = request['request_params']
 
@@ -92,9 +103,10 @@ class CopyCourse:
             return '200 OK', 'No courses have been added yet'
 
 #controller - edit course
-
+@AppRoute(routes=routes, url='/edit_course/')
 class EditCourse:
     category_id = -1
+    @Debug(name='EditCourse')
     def __call__(self, request):
 
         if request['method'] == "POST":
@@ -120,8 +132,9 @@ class EditCourse:
             return '200 OK', render('edit_course.html', old_name=name, name=name, id=self.id_category)
 
 # Controller create category
-
+@AppRoute(routes=routes, url='/create_category/')
 class CreateCategory:
+    @Debug(name='CreateCategory')
     def __call__(self, request):
         if request['method'] == 'POST':
             print(request)
@@ -147,8 +160,9 @@ class CreateCategory:
 
 
 #controller - list categories
-
+@AppRoute(routes=routes, url='/category_list/')
 class CategoryList:
+    @Debug(name='CategoryList')
     def __call__(self, request):
         logger.log('Список категорий')
         return '200 OK', render('category_list.html', objects_list=site.categories)
