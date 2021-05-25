@@ -1,10 +1,12 @@
 from copy import deepcopy
 import quopri
+from behavior_patterns import ConsoleWriter, Subject
 
 # Abctrat user
 
 class User:
-    pass
+    def __init__(self, name):
+        self.name = name
 
 # Teacher
 
@@ -13,8 +15,10 @@ class Teacher:
 
 #Student
 
-class Student:
-    pass
+class Student(User):
+    def __init__(self, name):
+        self.courses = []
+        super().__init__(name)
 
 #Generating patern Abstract fabric - fabric users
 
@@ -36,12 +40,22 @@ class CoursePrototype:
     def clone(self):
         return deepcopy(self)
 
-class Course(CoursePrototype):
+class Course(CoursePrototype, Subject):
 
     def __init__(self, name, category):
         self.name = name
         self.category = category
         self.category.courses.append(self)
+        self.students = []
+        super().__init__()  # access Parent variable
+
+    def __getitem__(self, item):
+        return self.students[item]
+
+    def add_student(self, student: Student):
+        self.students.append(student)
+        student.courses.append(self)
+        self.notify()
 
 #interactive course
 class InteractiveCourse(Course):
@@ -124,7 +138,7 @@ class Engine:
         val_decode_str = quopri.decodestring(val_b)
         return val_decode_str.decode('UTF-8')
 
-    #generating pattern Singleton
+    #generating pattern  for Logger
 
 class SingletonByName(type):
 
@@ -144,11 +158,13 @@ class SingletonByName(type):
             cls.__instance[name] = super().__call__(*args, **kwargs)
             return cls.__instance[name]
 
+
 class Logger(metaclass=SingletonByName):
 
-    def __init__(self, name):
+    def __init__(self, name, writer=ConsoleWriter()):
         self.name = name
-
-    @staticmethod
-    def log(text):
-        print('log--->', text)
+        self.writer = writer
+    # @staticmethod
+    def log(self, text):
+        text = f'log--->', {text}
+        self.writer.write(text)
