@@ -1,17 +1,6 @@
 from datetime import date
-from views import Index, About, StudyPrograms, CategoryList, CopyCourse, CreateCategory, CreateCourse, CoursesList, EditCourse
 
-# routes = {
-#     '/': Index(),
-#     '/about/': About(),
-#     '/study_programs/': StudyPrograms(),
-#     '/courses_list/': CoursesList(),
-#     '/create_course/': CreateCourse(),
-#     '/create_category/': CreateCategory(),
-#     '/category_list/': CategoryList(),
-#     '/copy_course/': CopyCourse(),
-#     '/edit_course/': EditCourse(),
-# }
+
 
 # front controller
 def secret_front(request):

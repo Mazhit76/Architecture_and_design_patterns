@@ -1,6 +1,6 @@
 from copy import deepcopy
 import quopri
-from behavior_patterns import ConsoleWriter, Subject
+from .behavior_patterns import ConsoleWriter, Subject
 
 # Abctrat user
 
@@ -30,8 +30,8 @@ class UserFactory:
 
     #generating pattern Fabric metod
     @classmethod
-    def create(cls, type_):
-        return cls.types[type_]()
+    def create(cls, type_, name):
+        return cls.types[type_](name)
 
 # generating pattern Prototype  - course
 
@@ -106,8 +106,8 @@ class Engine:
         self.categories = []
 
     @staticmethod
-    def create_user(type_):
-        return UserFactory.create(type_)
+    def create_user(type_, name):
+        return UserFactory.create(type_, name)
 
     @staticmethod
     def create_category(name, category=None):
@@ -124,12 +124,16 @@ class Engine:
     def create_course(type_, name, category):
         return CourseFactory.create(type_, name, category)
 
-    def get_course(self, name):
+    def get_course(self, name) -> Course:
         for item in self.courses:
             if item.name == name:
                 return item
         return None
 
+    def get_student(self, name) -> Student:
+        for item in self.students:
+            if item.name == name:
+                return item
 
 
     @staticmethod
@@ -138,7 +142,7 @@ class Engine:
         val_decode_str = quopri.decodestring(val_b)
         return val_decode_str.decode('UTF-8')
 
-    #generating pattern  for Logger
+    #generating pattern Singletone for Logger
 
 class SingletonByName(type):
 
@@ -164,6 +168,7 @@ class Logger(metaclass=SingletonByName):
     def __init__(self, name, writer=ConsoleWriter()):
         self.name = name
         self.writer = writer
+
     # @staticmethod
     def log(self, text):
         text = f'log--->', {text}

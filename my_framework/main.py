@@ -35,7 +35,7 @@ class Framework:
             request['data'] = data
             print(f'Поступил post-запрос: {Framework.decode_value(data)}')
 
-        elif method == 'GET':
+        if method == 'GET':
             data = GetRequest().get_request_params(environ)
             request['request_params'] = data
             print(f'Нам пришли GET параметры: {data}')
@@ -66,3 +66,26 @@ class Framework:
             value_decode_str = quopri.decodestring(value).decode('UTF-8')
             new_data[x] = value_decode_str
         return new_data
+
+
+#WSGI-application for every request output in console
+
+class DebugAppication(Framework):
+    def __init__(self, routes_obj, fronts_obj):
+        self.application = Framework(routes_obj, fronts_obj)
+        super().__init__(routes_obj, fronts_obj)
+    def __call__(self, env, start_responce):
+        print('DEBUG_MODE')
+        print(env)
+        return self.application(env, start_responce)
+
+# WSGI-application fake, all request responce '200 OK, Hello from Fake'
+class FakeApplication(Framework):
+
+    def __init__(self, routes_obj, fronts_obj):
+        self.application = Framework(routes_obj, fronts_obj)
+        super().__init__(routes_obj, fronts_obj)
+
+    def __call__(self, env, start_responce):
+        start_responce('200 OK', [('Content-Type', 'text/html')])
+        return [b'Hello from Fake']

@@ -3,9 +3,13 @@ from datetime import date
 from my_framework.templator import render
 from patterns.creational_patterns import Engine, Logger
 from patterns.structural_patterns import AppRoute, Debug
+from patterns.behavior_patterns import EmailNotifier, SmsNotifier, CreateView, ListView, TemplateView, BaseSerializer
 
 site = Engine()
 logger = Logger('main')
+
+email_notifier = EmailNotifier()
+sms_notifier = SmsNotifier()
 
 routes = {}
 
@@ -23,13 +27,15 @@ class About:
     def __call__(self, request):
         return '200 OK', render('about.html')
 
+
+
 # controller -  Not Found
 
 class NotFound404:
     def __call__(self, request):
         return '404 WHAT', 'PAGE not found look your old and write new views or change request'
 
-# controller -  Shedules
+# controller -  Shedule
 @AppRoute(routes=routes, url='/study_programs/')
 class StudyPrograms:
     @Debug(name='StudyPrograms')
@@ -68,17 +74,18 @@ class CreateCourse:
                 category = site.find_category_by_id(int(self.category_id))
 
                 course = site.create_course('record', name, category)
+                #Added observer
+                course.observers.append(email_notifier)
+                course.observers.append(sms_notifier)
                 site.courses.append(course)
             return '200 OK', render('course_list.html', objects_list=category.courses,
                                     name=category.name, id=category.id)
         else:
-            try:
+
                 self.category_id = int(request['request_params']['id'])
                 category = site.find_category_by_id(int(self.category_id))
 
                 return '200 OK', render('create_course.html', name=category.name, id=category.id)
-            except KeyError:
-                return '200 OK', 'No category have been added yet'
 
 
 
@@ -167,3 +174,44 @@ class CategoryList:
         logger.log('Список категорий')
         return '200 OK', render('category_list.html', objects_list=site.categories)
 
+@AppRoute(routes=routes, url='/student-list/')
+class StudentListView(ListView):
+    queryset = site.students
+    template_name = 'student_list.html'
+
+@AppRoute(routes=routes, url='/create-student/')
+class StudentCreateView(CreateView):
+    template_name = 'create_student.html'
+
+    def create_obj(self, data: dict):
+        name = data['name']
+        name = site.decode_value(name)
+        new_obj = site.create_user('student', name)
+        site.students.append(new_obj)
+
+@AppRoute(routes=routes, url='/add-students/')
+class AddStudentByCourseCreateView(CreateView):
+    template_name = 'add_student.html'
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['courses'] = site.courses
+        context['students'] = site. students
+        return context
+
+    def create_obj(self, data: dict):
+        course_name = data['course_name']
+        course_name = site.decode_value(course_name)
+        course = site.get_course(course_name)
+        student_name = data['student_name']
+        student_name = site.decode_value(student_name)
+        student = site.get_student(student_name)
+        course.add_student(student)
+
+
+
+@AppRoute(routes=routes, url='/api/')
+class CourseApi:
+    @Debug(name='CourseApi')
+    def __call__(self, request):
+        return '200 OK', BaseSerializer(site.courses).save()

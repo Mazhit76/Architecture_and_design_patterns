@@ -1,4 +1,4 @@
-from ..my_framework.templator import render
+from my_framework.templator import render
 import jsonpickle
 
 #pattern Observer
@@ -34,7 +34,7 @@ class BaseSerializer:
 
 #pattern Template Method
 
-class TempalateView:
+class TemplateView:
     template_name = 'template.html'
 
     def get_context_data(self):
@@ -50,10 +50,10 @@ class TempalateView:
     def __call__(self, request):
         return self.render_template_with_context()
 
-class ListView(TempalateView):
+class ListView(TemplateView):
     queryset = []
     template_name = 'list.html'
-    context_object_name = 'object_list'
+    context_object_name = 'objects_list'
 
     def get_queryset(self):
         print(self.queryset)
@@ -68,7 +68,7 @@ class ListView(TempalateView):
         context = {context_object_name: queryset}
         return context
 
-class CreateView(TempalateView):
+class CreateView(TemplateView):
     template_name = 'create.html'
 
     @staticmethod
