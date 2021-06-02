@@ -4,12 +4,17 @@ from my_framework.templator import render
 from patterns.creational_patterns import Engine, Logger
 from patterns.structural_patterns import AppRoute, Debug
 from patterns.behavior_patterns import EmailNotifier, SmsNotifier, CreateView, ListView, TemplateView, BaseSerializer
+from patterns.architecture_patterns_mappers import StudentMapper, Student, MapperRegistry
+from patterns.arhitecture_patterns_unit_of_work import DomainObject, UnitOfWork
 
 site = Engine()
 logger = Logger('main')
 
 email_notifier = EmailNotifier()
 sms_notifier = SmsNotifier()
+
+UnitOfWork.new_current()
+UnitOfWork.get_current().set_mapper_registry(MapperRegistry)
 
 routes = {}
 
@@ -60,6 +65,7 @@ class CoursesList:
 @AppRoute(routes=routes, url='/create_course/')
 class CreateCourse:
     category_id = -1
+
     @Debug(name='CreateCourse')
     def __call__(self, request):
         if request['method'] == 'POST':
@@ -143,6 +149,7 @@ class EditCourse:
 class CreateCategory:
     @Debug(name='CreateCategory')
     def __call__(self, request):
+
         if request['method'] == 'POST':
             print(request)
             data = request['data']
@@ -176,8 +183,12 @@ class CategoryList:
 
 @AppRoute(routes=routes, url='/student-list/')
 class StudentListView(ListView):
-    queryset = site.students
+
     template_name = 'student_list.html'
+
+    def get_queryset(self):
+        mapper = MapperRegistry.get_current_mapper('student')
+        return mapper.all()
 
 @AppRoute(routes=routes, url='/create-student/')
 class StudentCreateView(CreateView):
@@ -188,6 +199,8 @@ class StudentCreateView(CreateView):
         name = site.decode_value(name)
         new_obj = site.create_user('student', name)
         site.students.append(new_obj)
+        new_obj.mark_new()
+        UnitOfWork.get_current().commit()
 
 @AppRoute(routes=routes, url='/add-students/')
 class AddStudentByCourseCreateView(CreateView):

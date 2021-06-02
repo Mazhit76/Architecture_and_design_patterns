@@ -1,8 +1,9 @@
 from copy import deepcopy
 import quopri
 from .behavior_patterns import ConsoleWriter, Subject
+from .arhitecture_patterns_unit_of_work import DomainObject
 
-# Abctrat user
+# Abstract user
 
 class User:
     def __init__(self, name):
@@ -10,12 +11,12 @@ class User:
 
 # Teacher
 
-class Teacher:
+class Teacher(User):
     pass
 
 #Student
 
-class Student(User):
+class Student(User, DomainObject):
     def __init__(self, name):
         self.courses = []
         super().__init__(name)
