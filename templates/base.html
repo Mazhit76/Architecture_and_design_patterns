@@ -15,12 +15,11 @@
     {% endblock %}
 </head>
 <body>
-    <div class="menu">
-        <a href="/">Главная</a>
-        <a href="/about/">Авторизация</a>
-        {% block menu %}    {% endblock %}
+<div class="menu">
 
-    </div>
+    {% block menu %}    {% endblock %}
+
+</div>
     <div class="container">
         <div class="header"></div>
         {% block body %}    {% endblock %}
